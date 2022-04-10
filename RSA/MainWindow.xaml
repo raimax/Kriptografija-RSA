@@ -18,19 +18,19 @@
                         <StackPanel Grid.Row="0">
                             <Label Content="Plain text"></Label>
                             <ScrollViewer Height="80">
-                                <TextBox></TextBox>
+                                <TextBox x:Name="EncryptionPlainText"></TextBox>
                             </ScrollViewer>
                             <Label Content="Prime 1 (p)"></Label>
                             <ScrollViewer Height="80">
-                                <TextBox></TextBox>
+                                <TextBox x:Name="Prime1"></TextBox>
                             </ScrollViewer>
                             <Label Content="Prime 2 (q)"></Label>
                             <ScrollViewer Height="80">
-                                <TextBox></TextBox>
+                                <TextBox x:Name="Prime2"></TextBox>
                             </ScrollViewer>
                             <Label Content="Cypher Text"></Label>
                             <ScrollViewer Height="80">
-                                <TextBox Background="#FFF3F3F3" IsReadOnly="True"></TextBox>
+                                <TextBox x:Name="EncryptionCypherText" Background="#FFF3F3F3" IsReadOnly="True"></TextBox>
                             </ScrollViewer>
                         </StackPanel>
                         <Button Grid.Row="1" Margin="0 10 0 10" Height="30" Content="Encrypt" Background="#FF386FC8" Foreground="White" />
@@ -47,11 +47,11 @@
                         <StackPanel Grid.Row="0">
                             <Label Content="Cypher Text"></Label>
                             <ScrollViewer Height="80">
-                                <TextBox></TextBox>
+                                <TextBox x:Name="DecryptionCypherText"></TextBox>
                             </ScrollViewer>
                             <Label Content="Plain text"></Label>
                             <ScrollViewer Height="80">
-                                <TextBox Background="#FFF3F3F3" IsReadOnly="True"></TextBox>
+                                <TextBox x:Name="DecryptionPlainText" Background="#FFF3F3F3" IsReadOnly="True"></TextBox>
                             </ScrollViewer>
 
                         </StackPanel>
