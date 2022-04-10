@@ -1,0 +1,64 @@
+﻿<Window x:Class="RSA.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RSA"
+        mc:Ignorable="d"
+        Title="RSA" Height="570" Width="400">
+    <Grid>
+        <TabControl>
+            <TabItem Header="Encryption">
+                <Border Background="#FFF3F3F3">
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0">
+                            <Label Content="Plain text"></Label>
+                            <ScrollViewer Height="80">
+                                <TextBox></TextBox>
+                            </ScrollViewer>
+                            <Label Content="Prime 1 (p)"></Label>
+                            <ScrollViewer Height="80">
+                                <TextBox></TextBox>
+                            </ScrollViewer>
+                            <Label Content="Prime 2 (q)"></Label>
+                            <ScrollViewer Height="80">
+                                <TextBox></TextBox>
+                            </ScrollViewer>
+                            <Label Content="Cypher Text"></Label>
+                            <ScrollViewer Height="80">
+                                <TextBox Background="#FFF3F3F3" IsReadOnly="True"></TextBox>
+                            </ScrollViewer>
+                        </StackPanel>
+                        <Button Grid.Row="1" Margin="0 10 0 10" Height="30" Content="Encrypt" Background="#FF386FC8" Foreground="White" />
+                    </Grid>
+                </Border>
+            </TabItem>
+            <TabItem Header="Decryption">
+                <Border Background="#FFF3F3F3">
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0">
+                            <Label Content="Cypher Text"></Label>
+                            <ScrollViewer Height="80">
+                                <TextBox></TextBox>
+                            </ScrollViewer>
+                            <Label Content="Plain text"></Label>
+                            <ScrollViewer Height="80">
+                                <TextBox Background="#FFF3F3F3" IsReadOnly="True"></TextBox>
+                            </ScrollViewer>
+
+                        </StackPanel>
+                        <Button Grid.Row="1" Margin="0 10 0 10" Height="30" Content="Decrypt" Background="#FF386FC8" Foreground="White" />
+                    </Grid>
+                </Border>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
