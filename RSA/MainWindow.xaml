@@ -5,60 +5,92 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RSA"
         mc:Ignorable="d"
-        Title="RSA" Height="570" Width="400">
-    <Grid>
-        <TabControl>
-            <TabItem Header="Encryption">
-                <Border Background="#FFF3F3F3">
-                    <Grid Margin="10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="auto" />
-                        </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="0">
-                            <Label Content="Plain text"></Label>
-                            <ScrollViewer Height="80">
-                                <TextBox x:Name="EncryptionPlainText"></TextBox>
-                            </ScrollViewer>
-                            <Label Content="Prime 1 (p)"></Label>
-                            <ScrollViewer Height="80">
-                                <TextBox x:Name="Prime1"></TextBox>
-                            </ScrollViewer>
-                            <Label Content="Prime 2 (q)"></Label>
-                            <ScrollViewer Height="80">
-                                <TextBox x:Name="Prime2"></TextBox>
-                            </ScrollViewer>
-                            <Label Content="Cypher Text"></Label>
-                            <ScrollViewer Height="80">
-                                <TextBox x:Name="EncryptionCypherText" Background="#FFF3F3F3" IsReadOnly="True"></TextBox>
-                            </ScrollViewer>
-                        </StackPanel>
-                        <Button Grid.Row="1" Margin="0 10 0 10" Height="30" Content="Encrypt" Background="#FF386FC8" Foreground="White" />
-                    </Grid>
-                </Border>
-            </TabItem>
-            <TabItem Header="Decryption">
-                <Border Background="#FFF3F3F3">
-                    <Grid Margin="10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="auto" />
-                        </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="0">
-                            <Label Content="Cypher Text"></Label>
-                            <ScrollViewer Height="80">
-                                <TextBox x:Name="DecryptionCypherText"></TextBox>
-                            </ScrollViewer>
-                            <Label Content="Plain text"></Label>
-                            <ScrollViewer Height="80">
-                                <TextBox x:Name="DecryptionPlainText" Background="#FFF3F3F3" IsReadOnly="True"></TextBox>
-                            </ScrollViewer>
+        Title="RSA" Height="590" Width="500
+        " ResizeMode="NoResize">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top" Height="25">
+            <MenuItem Header="File">
+                <MenuItem Header="Save">
+                    <MenuItem Click="BtnSaveCypherText" Header="Cypher Text" />
+                    <MenuItem Click="BtnSavePublicKey" Header="Public Key" />
+                    <MenuItem Click="BtnSaveDecryptedText" Header="Decrypted Text" />
+                </MenuItem>
+                <MenuItem Header="Load">
+                    <MenuItem Click="BtnLoadCypherText" Header="Cypher Text" />
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        <Grid>
+            <TabControl>
+                <TabItem Header="Encryption">
+                    <Border Background="#FFF3F3F3">
+                        <Grid Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Row="0" Grid.Column="0">
+                                <Label Content="Plain text"></Label>
+                                <ScrollViewer Height="80">
+                                    <TextBox TextWrapping="Wrap" x:Name="EncryptionPlainText"></TextBox>
+                                </ScrollViewer>
+                                <Label Content="Prime 1 (p)"></Label>
+                                <ScrollViewer Height="80">
+                                    <TextBox TextWrapping="Wrap" x:Name="Prime1"></TextBox>
+                                </ScrollViewer>
+                                <Label Content="Prime 2 (q)"></Label>
+                                <ScrollViewer Height="80">
+                                    <TextBox TextWrapping="Wrap" x:Name="Prime2"></TextBox>
+                                </ScrollViewer>
+                                <Label Content="Cypher Text"></Label>
+                                <ScrollViewer Height="80">
+                                    <TextBox TextWrapping="Wrap" x:Name="EncryptionCypherText" Background="#FFF3F3F3" IsReadOnly="True"></TextBox>
+                                </ScrollViewer>
+                            </StackPanel>
+                            <GroupBox Header="Variables" Grid.Column="1">
+                                <StackPanel>
+                                    <Label Name="LabelN" />
+                                    <Label Name="LabelPhi" />
+                                    <Label Name="LabelE" />
+                                    <Label Name="LabelD" />
+                                </StackPanel>
+                            </GroupBox>
+                            <Button x:Name="BtnEncrypt" Click="BtnEncrypt_Click" Grid.Row="1" Margin="0 10 0 10" Height="30" Content="Encrypt" Background="#FF386FC8" Foreground="White" />
+                        </Grid>
+                    </Border>
+                </TabItem>
+                <TabItem Header="Decryption">
+                    <Border Background="#FFF3F3F3">
+                        <Grid Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0">
+                                <Label Content="Cypher Text" />
+                                <ScrollViewer Height="80">
+                                    <TextBox TextWrapping="Wrap" x:Name="DecryptionCypherText"></TextBox>
+                                </ScrollViewer>
+                                <Label Content="N" />
+                                <ScrollViewer Height="25">
+                                    <TextBox TextWrapping="Wrap" x:Name="DecryptionN"></TextBox>
+                                </ScrollViewer>
+                                <Label Content="Plain text"></Label>
+                                <ScrollViewer Height="80">
+                                    <TextBox TextWrapping="Wrap" x:Name="DecryptionPlainText" Background="#FFF3F3F3" IsReadOnly="True"></TextBox>
+                                </ScrollViewer>
 
-                        </StackPanel>
-                        <Button Grid.Row="1" Margin="0 10 0 10" Height="30" Content="Decrypt" Background="#FF386FC8" Foreground="White" />
-                    </Grid>
-                </Border>
-            </TabItem>
-        </TabControl>
-    </Grid>
+                            </StackPanel>
+                            <Button Name="BtnDecrypt" Click="BtnDecrypt_Click" Grid.Row="1" Margin="0 10 0 10" Height="30" Content="Decrypt" Background="#FF386FC8" Foreground="White" />
+                        </Grid>
+                    </Border>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </DockPanel>
+    
 </Window>
