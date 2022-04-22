@@ -1,48 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace RSA
 {
     public class Rsa
     {
-        public List<ulong> Encrypted { get; set; } = new List<ulong>();
+        public List<BigInteger> Encrypted { get; set; } = new List<BigInteger>();
         public byte[]? Decrypted { get; set; }
+        public List<BigInteger> PublicKey { get; set; } = new List<BigInteger>();
 
-        public List<ulong> Encrypt(byte[] plainText, ulong e, ulong n)
+        public List<BigInteger> Encrypt(byte[] plainText, BigInteger e, BigInteger n)
         {
-            List<ulong> encrypted = new();
+            List<BigInteger> encrypted = new();
 
             for (int i = 0; i < plainText.Length; i++)
             {
-                encrypted.Add((ulong)(Math.Pow(plainText[i], e) % n));
+                encrypted.Add(BigInteger.Pow(plainText[i], (int)e) % n);
             }
 
             return encrypted;
         }
 
-        public byte[] Decrypt(List<ulong> encryptedText, ulong d, ulong n)
+        public byte[] Decrypt(List<BigInteger> encryptedText, BigInteger d, BigInteger n)
         {
             byte[] decrypted = new byte[encryptedText.Count];
 
             for (int i = 0; i < encryptedText.Count; i++)
             {
-                decrypted[i] = (byte)(Math.Pow(encryptedText[i], d) % n);
+                decrypted[i] = (byte)BigInteger.ModPow(encryptedText[i], d, n);
             }
 
             return decrypted;
         }
 
-        public ulong FindN(ulong p, ulong q)
+        public BigInteger FindN(BigInteger p, BigInteger q)
         {
             return p * q;
         }
 
-        public ulong FindPhi(ulong p, ulong q)
+        public BigInteger FindPhi(BigInteger p, BigInteger q)
         {
             return ((p - 1) * (q - 1));
         }
 
-        public ulong FindGcd(ulong a, ulong b)
+        public BigInteger FindGcd(BigInteger a, BigInteger b)
         {
             if (b == 0)
             {
@@ -52,9 +54,9 @@ namespace RSA
             return FindGcd(b, a % b);
         }
 
-        public ulong FindE(ulong n, ulong phi)
+        public BigInteger FindE(BigInteger n, BigInteger phi)
         {
-            ulong e = 2;
+            BigInteger e = 2;
             while (FindGcd(e, phi) != 1)
             {
                 e++;
@@ -63,23 +65,23 @@ namespace RSA
             return e;
         }
 
-        private bool IsPrime(ulong number)
+        //private bool IsPrime(BigInteger number)
+        //{
+        //    if (number == 1) return false;
+        //    if (number == 2) return true;
+
+        //    var limit = Math.Ceiling(Math.Sqrt(number));
+
+        //    for (BigInteger i = 2; i <= limit; ++i)
+        //        if (number % i == 0)
+        //            return false;
+        //    return true;
+
+        //}
+
+        public BigInteger GeneratePrivateKey(BigInteger exponent, BigInteger phi)
         {
-            if (number == 1) return false;
-            if (number == 2) return true;
-
-            var limit = Math.Ceiling(Math.Sqrt(number));
-
-            for (ulong i = 2; i <= limit; ++i)
-                if (number % i == 0)
-                    return false;
-            return true;
-
-        }
-
-        public ulong GeneratePrivateKey(ulong exponent, ulong phi)
-        {
-            ulong d = 1;
+            BigInteger d = 1;
 
             while (d * exponent % phi != 1)
             {
@@ -91,7 +93,7 @@ namespace RSA
 
         public Dictionary<string, int> FindPrimeNumbers(int n)
         {
-            int num = 33;
+            int num = n;
             int i, j;
             int count = 0;
             List<int> nums = new List<int>();

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System.Collections.Generic;
 using System.IO;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,21 +22,24 @@ namespace RSA
 
         private void BtnEncrypt_Click(object sender, RoutedEventArgs e)
         {
-            ulong p = uint.Parse(Prime1.Text);
-            ulong q = uint.Parse(Prime2.Text);
-            ulong n = _rsa.FindN(p, q);
-            ulong phi = _rsa.FindPhi(p, q);
-            ulong exponent = _rsa.FindE(n, phi);
+            BigInteger p = uint.Parse(Prime1.Text);
+            BigInteger q = uint.Parse(Prime2.Text);
+            BigInteger n = _rsa.FindN(p, q);
+            BigInteger phi = _rsa.FindPhi(p, q);
+            BigInteger exponent = _rsa.FindE(n, phi);
 
             LabelN.Content = $"n: {n}";
             LabelPhi.Content = $"phi: {phi}";
             LabelE.Content = $"e: {exponent}";
 
+            _rsa.PublicKey.Add(exponent);
+            _rsa.PublicKey.Add(n);
+
             byte[] plainTextBytes = Encoding.ASCII.GetBytes(EncryptionPlainText.Text);
 
             _rsa.Encrypted = _rsa.Encrypt(plainTextBytes, exponent, n);
 
-            ulong d = _rsa.GeneratePrivateKey(exponent, phi);
+            BigInteger d = _rsa.GeneratePrivateKey(exponent, phi);
             LabelD.Content = $"d: {d}";
 
             EncryptionCypherText.Text = ListToString(_rsa.Encrypted);
@@ -57,16 +61,16 @@ namespace RSA
             int n = int.Parse(DecryptionN.Text);
             Dictionary<string, int> primeNumbers = _rsa.FindPrimeNumbers(n);
 
-            ulong p = (ulong)primeNumbers["p"];
-            ulong q = (ulong)primeNumbers["q"];
+            BigInteger p = (BigInteger)primeNumbers["p"];
+            BigInteger q = (BigInteger)primeNumbers["q"];
 
-            ulong phi = _rsa.FindPhi(p, q);
-            ulong exponent = _rsa.FindE((ulong)n, phi);
+            BigInteger phi = _rsa.FindPhi(p, q);
+            BigInteger exponent = _rsa.FindE((BigInteger)n, phi);
 
-            ulong d = _rsa.GeneratePrivateKey(exponent, phi);
+            BigInteger d = _rsa.GeneratePrivateKey(exponent, phi);
 
-            List<ulong> encryptedText = StringToList(DecryptionCypherText.Text);
-            byte[] decryptedText = _rsa.Decrypt(encryptedText, d, (ulong)n);
+            List<BigInteger> encryptedText = StringToList(DecryptionCypherText.Text);
+            byte[] decryptedText = _rsa.Decrypt(encryptedText, d, (BigInteger)n);
 
             string decryptedTextString = string.Empty;
 
@@ -75,7 +79,8 @@ namespace RSA
                 decryptedTextString += item + " ";
             }
 
-            DecryptionPlainText.Text = decryptedTextString.Trim();
+            //DecryptionPlainText.Text = decryptedTextString.Trim();
+            DecryptionPlainText.Text = Encoding.UTF8.GetString(decryptedText);
 
 
         }
@@ -88,19 +93,19 @@ namespace RSA
             }
         }
 
-        private void BtnSavePublicKey(object sender, RoutedEventArgs e)
+        private async void BtnSavePublicKey(object sender, RoutedEventArgs e)
         {
-            //
+            await SaveFileToDisk("PublicKey.txt", $"{_rsa.PublicKey[0]} {_rsa.PublicKey[1]}");
         }
 
-        private List<ulong> StringToList(string s)
+        private List<BigInteger> StringToList(string s)
         {
             string[] stringArr = s.Split(" ");
-            List<ulong> list = new List<ulong>();
+            List<BigInteger> list = new List<BigInteger>();
 
             foreach (string str in stringArr)
             {
-                list.Add(ulong.Parse(str));
+                list.Add(BigInteger.Parse(str));
             }
 
             return list;
@@ -130,7 +135,7 @@ namespace RSA
             }
         }
 
-        private async Task OpenFileFromDisk()
+        private async Task LoadCypherTextFromDisk()
         {
             OpenFileDialog openFileDialog = new();
             openFileDialog.Filter = "Text Files | *.txt";
@@ -149,9 +154,35 @@ namespace RSA
             }
         }
 
+        private async Task LoadPublicKeyFromDisk()
+        {
+            OpenFileDialog openFileDialog = new();
+            openFileDialog.Filter = "Text Files | *.txt";
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                if (openFileDialog.FileName != "")
+                {
+                    var fileStream = openFileDialog.OpenFile();
+
+                    using (StreamReader reader = new(fileStream))
+                    {
+                        var stringFromFile = await reader.ReadToEndAsync();
+                        string n = stringFromFile.Split(" ")[1];
+                        DecryptionN.Text = n;
+                    }
+                }
+            }
+        }
+
         private async void BtnLoadCypherText(object sender, RoutedEventArgs e)
         {
-            await OpenFileFromDisk();
+            await LoadCypherTextFromDisk();
+        }
+
+        private async void BtnLoadPublicKey(object sender, RoutedEventArgs e)
+        {
+            await LoadPublicKeyFromDisk();
         }
     }
 }

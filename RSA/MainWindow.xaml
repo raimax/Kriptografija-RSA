@@ -17,6 +17,7 @@
                 </MenuItem>
                 <MenuItem Header="Load">
                     <MenuItem Click="BtnLoadCypherText" Header="Cypher Text" />
+                    <MenuItem Click="BtnLoadPublicKey" Header="Public Key" />
                 </MenuItem>
             </MenuItem>
         </Menu>
